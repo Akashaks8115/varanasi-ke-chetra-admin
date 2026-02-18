@@ -1,0 +1,197 @@
+.flights-dashboard {
+    padding: 32px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.dashboard-header h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--secondary);
+}
+
+.total-badge {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-sub);
+    background: var(--bg-main);
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border-light);
+}
+
+.sub-header {
+    font-size: 14px;
+    color: var(--text-sub);
+    margin-bottom: 28px;
+}
+
+/* Table wrapper */
+.table-wrapper {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-light);
+    overflow: hidden;
+}
+
+.enquiries-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.enquiries-table thead {
+    background: linear-gradient(135deg, var(--bg-main) 0%, #f0f4ff 100%);
+}
+
+.enquiries-table th {
+    padding: 16px 20px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-sub);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border-light);
+    white-space: nowrap;
+}
+
+.enquiries-table td {
+    padding: 16px 20px;
+    font-size: 14px;
+    color: var(--secondary);
+    border-bottom: 1px solid var(--border-light);
+    vertical-align: middle;
+}
+
+.enquiries-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.enquiries-table tbody tr {
+    transition: background 0.15s;
+}
+
+.enquiries-table tbody tr:hover {
+    background: rgba(var(--primary-rgb), 0.03);
+}
+
+/* Cell styles */
+.passenger-name {
+    font-weight: 700;
+    color: var(--secondary);
+}
+
+.passenger-contact {
+    font-size: 12px;
+    color: var(--text-sub);
+    margin-top: 2px;
+}
+
+.route-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+}
+
+.route-arrow {
+    color: var(--primary);
+    font-size: 16px;
+}
+
+.date-range {
+    font-size: 13px;
+}
+
+.date-label {
+    font-size: 11px;
+    color: var(--text-sub);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.pax-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-right: 4px;
+}
+
+.pax-chip.adult {
+    background: rgba(var(--primary-rgb), 0.08);
+    color: var(--primary);
+}
+
+.pax-chip.child {
+    background: rgba(16, 185, 129, 0.08);
+    color: #059669;
+}
+
+.created-date {
+    font-size: 12px;
+    color: var(--text-sub);
+}
+
+.action-btn {
+    padding: 6px 14px;
+    border-radius: var(--radius-md);
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid #fecaca;
+    background: #fef2f2;
+    color: #ef4444;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.action-btn:hover {
+    background: #ef4444;
+    color: white;
+}
+
+.loading,
+.error-message,
+.no-data {
+    text-align: center;
+    padding: 60px;
+    color: var(--text-sub);
+}
+
+.error-message {
+    color: #ef4444;
+}
+
+/* Pagination info */
+.pagination-info {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border-light);
+    font-size: 13px;
+    color: var(--text-sub);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

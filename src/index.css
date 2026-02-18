@@ -1,0 +1,43 @@
+:root {
+    --primary: #ff7a18;
+    --primary-rgb: 255, 122, 24;
+    --primary-gradient: linear-gradient(135deg, #ff7a18 0%, #ff9a44 100%);
+    --secondary: #1e293b;
+    --bg-main: #f8fafc;
+    --bg-sidebar: #ffffff;
+    --text-main: #334155;
+    --text-sub: #64748b;
+    --border-light: #e2e8f0;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    -webkit-font-smoothing: antialiased;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    transition: var(--transition);
+}
+
+input,
+textarea,
+select {
+    transition: var(--transition);
+}

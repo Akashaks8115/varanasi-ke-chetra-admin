@@ -1,0 +1,208 @@
+.spiritual-dashboard {
+    padding: 32px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.dashboard-header h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--secondary);
+}
+
+.add-btn {
+    background: var(--primary-gradient);
+    color: white;
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.2);
+    cursor: pointer;
+    border: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.add-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(var(--primary-rgb), 0.3);
+}
+
+.packages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 28px;
+}
+
+.package-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-light);
+    transition: var(--transition);
+}
+
+.package-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Image carousel strip */
+.card-images {
+    display: flex;
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+}
+
+.card-images img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.image-count-badge {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.55);
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    backdrop-filter: blur(6px);
+}
+
+.card-body {
+    padding: 24px;
+}
+
+.card-body h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--secondary);
+    margin: 0 0 6px 0;
+}
+
+.card-subtitle {
+    font-size: 13px;
+    color: var(--text-sub);
+    margin-bottom: 16px;
+}
+
+.card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.meta-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: var(--bg-main);
+    color: var(--text-sub);
+}
+
+.meta-chip.city {
+    background: rgba(var(--primary-rgb), 0.08);
+    color: var(--primary);
+}
+
+.meta-chip.duration {
+    background: rgba(16, 185, 129, 0.08);
+    color: #059669;
+}
+
+.meta-chip.contact {
+    background: rgba(245, 158, 11, 0.08);
+    color: #d97706;
+}
+
+.places-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 20px;
+}
+
+.place-tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 12px;
+    background: var(--bg-main);
+    color: var(--text-sub);
+    border: 1px solid var(--border-light);
+}
+
+.card-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.edit-btn,
+.delete-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid var(--border-light);
+    background: white;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.edit-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(var(--primary-rgb), 0.05);
+}
+
+.delete-btn {
+    color: #ef4444;
+}
+
+.delete-btn:hover {
+    background: #fef2f2;
+    border-color: #fecaca;
+}
+
+.loading,
+.error-message,
+.no-data {
+    text-align: center;
+    padding: 60px;
+    color: var(--text-sub);
+    grid-column: 1 / -1;
+}
+
+.error-message {
+    color: #ef4444;
+}

@@ -1,0 +1,230 @@
+.transport-dashboard {
+    padding: 32px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.dashboard-header h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--secondary);
+}
+
+.add-btn {
+    background: var(--primary-gradient);
+    color: white;
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.2);
+    cursor: pointer;
+    border: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.add-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(var(--primary-rgb), 0.3);
+}
+
+.vehicles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 28px;
+}
+
+/* Vehicle Card */
+.vehicle-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-light);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+}
+
+.vehicle-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(var(--primary-rgb), 0.2);
+}
+
+/* Vehicle image banner */
+.vehicle-image {
+    width: 100%;
+    height: 180px;
+    background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.vehicle-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.12));
+    transition: transform 0.3s;
+}
+
+.vehicle-card:hover .vehicle-image img {
+    transform: scale(1.05);
+}
+
+.vehicle-body {
+    padding: 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.vehicle-body h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--secondary);
+    margin: 0;
+}
+
+.vehicle-model {
+    font-size: 13px;
+    color: var(--text-sub);
+    margin: 0;
+}
+
+.vehicle-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+
+.chip.seats {
+    background: rgba(var(--primary-rgb), 0.08);
+    color: var(--primary);
+}
+
+.chip.type {
+    background: rgba(16, 185, 129, 0.08);
+    color: #059669;
+}
+
+.chip.baggage {
+    background: rgba(245, 158, 11, 0.08);
+    color: #d97706;
+}
+
+.chip.safety {
+    background: rgba(239, 68, 68, 0.08);
+    color: #dc2626;
+}
+
+/* In-cab features */
+.incab-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.feature-tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 12px;
+    background: var(--bg-main);
+    color: var(--text-sub);
+    border: 1px solid var(--border-light);
+}
+
+.vehicle-description {
+    font-size: 13px;
+    color: var(--text-sub);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.contact-row {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--secondary);
+}
+
+.card-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 4px;
+}
+
+.edit-btn,
+.delete-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid var(--border-light);
+    background: white;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.edit-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(var(--primary-rgb), 0.05);
+}
+
+.delete-btn {
+    color: #ef4444;
+}
+
+.delete-btn:hover {
+    background: #fef2f2;
+    border-color: #fecaca;
+}
+
+.loading,
+.error-message,
+.no-data {
+    text-align: center;
+    padding: 60px;
+    color: var(--text-sub);
+    grid-column: 1 / -1;
+}
+
+.error-message {
+    color: #ef4444;
+}
