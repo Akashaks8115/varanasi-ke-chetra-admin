@@ -17,7 +17,8 @@ const JyotirlingDashboard = () => {
             try {
                 const response = await getJyotirlingItems(1, 50);
                 if (response.success) {
-                    setItems(response.Data);
+                    const data = Array.isArray(response.Data) ? response.Data : [response.Data];
+                    setItems(data);
                 } else {
                     setError(response.message);
                 }

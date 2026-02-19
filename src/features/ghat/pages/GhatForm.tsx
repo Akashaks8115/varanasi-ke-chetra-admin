@@ -1,11 +1,15 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Upload, X } from 'lucide-react';
+import { ArrowLeft, Upload, X, Loader2 } from 'lucide-react';
+import { uploadImage } from '../../../services/uploadApi';
+import { insertGhat } from '../services/ghatApi';
 import './ghat-form.css';
 
 const GhatForm = () => {
     const navigate = useNavigate();
     const [previews, setPreviews] = useState<{ [key: string]: string }>({});
+    const [files, setFiles] = useState<{ [key: string]: File }>({});
+    const [loading, setLoading] = useState(false);
 
     const [formData, setFormData] = useState({
         Title: '',
@@ -32,6 +36,7 @@ const GhatForm = () => {
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
         const file = e.target.files?.[0];
         if (file) {
+            setFiles(prev => ({ ...prev, [fieldName]: file }));
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreviews(prev => ({ ...prev, [fieldName]: reader.result as string }));
@@ -46,17 +51,51 @@ const GhatForm = () => {
             delete newPreviews[fieldName];
             return newPreviews;
         });
+        setFiles(prev => {
+            const newFiles = { ...prev };
+            delete newFiles[fieldName];
+            return newFiles;
+        });
         if (fileInputRefs[fieldName as keyof typeof fileInputRefs].current) {
             fileInputRefs[fieldName as keyof typeof fileInputRefs].current!.value = '';
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Submitting Ghat Data:', formData);
-        console.log('Images (Base64/Files):', previews);
-        alert('Ghat submitted successfully (Check console for data)');
-        navigate('/ghat');
+        setLoading(true);
+
+        try {
+            const finalData = { ...formData } as any;
+
+            // 1. Upload images first
+            for (const field of ['ProfileUrl', 'BannerUrl1', 'BannerUrl2']) {
+                const file = files[field];
+                if (file) {
+                    const uploadRes = await uploadImage(file, `Varanasi Ke Chetra/Ghat/${formData.Title}`);
+                    if (uploadRes.success) {
+                        finalData[field] = uploadRes.imageUrl;
+                    } else {
+                        throw new Error(`Failed to upload ${field}`);
+                    }
+                }
+            }
+
+            // 2. Insert Ghat
+            const response = await insertGhat(finalData);
+
+            if (response.success) {
+                alert('Ghat added successfully!');
+                navigate('/ghat');
+            } else {
+                alert(response.message || 'Failed to add Ghat');
+            }
+        } catch (error: any) {
+            console.error('Submit error:', error);
+            alert(error.message || 'An error occurred while saving the Ghat');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -196,8 +235,15 @@ const GhatForm = () => {
                 </div>
 
                 <div className="form-footer">
-                    <button type="button" className="cancel-btn" onClick={() => navigate(-1)}>Cancel</button>
-                    <button type="submit" className="submit-btn">Save Ghat</button>
+                    <button type="button" className="cancel-btn" onClick={() => navigate(-1)} disabled={loading}>Cancel</button>
+                    <button type="submit" className="submit-btn" disabled={loading}>
+                        {loading ? (
+                            <>
+                                <Loader2 size={18} className="animate-spin" />
+                                Saving...
+                            </>
+                        ) : 'Save Ghat'}
+                    </button>
                 </div>
             </form>
         </div>

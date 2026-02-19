@@ -34,12 +34,15 @@ const App = () => {
                     <Route path="/ghat/add" element={<GhatForm />} />
                     <Route path="/temple" element={<TempleDashboard />} />
                     <Route path="/temple/add" element={<TempleForm />} />
+                    <Route path="/temple/edit/:id" element={<TempleForm />} />
                     <Route path="/historical-place" element={<HistoricalPlaceDashboard />} />
                     <Route path="/historical-place/add" element={<HistoricalPlaceForm />} />
+                    <Route path="/historical-place/edit/:id" element={<HistoricalPlaceForm />} />
                     <Route path="/jyotirling" element={<JyotirlingDashboard />} />
                     <Route path="/jyotirling/add" element={<JyotirlingForm />} />
                     <Route path="/food" element={<FoodDashboard />} />
                     <Route path="/food/add" element={<FoodForm />} />
+                    <Route path="/food/edit/:id" element={<FoodForm />} />
                     <Route path="/panchkroshi" element={<PanchkroshiDashboard />} />
                     <Route path="/panchkroshi/add" element={<PanchkroshiForm />} />
                     <Route path="/our-services" element={<OurServicesDashboard />} />
@@ -53,6 +56,7 @@ const App = () => {
                     <Route path="/send-notification" element={<SendNotificationPage />} />
                     <Route path=":category" element={<DataDashboard />} />
                     <Route path=":category/add" element={<EntityForm />} />
+                    <Route path=":category/edit/:id" element={<EntityForm />} />
                 </Route>
             </Routes>
         </BrowserRouter>

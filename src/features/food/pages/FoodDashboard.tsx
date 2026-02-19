@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getFoodsItems } from '../services/foodApi';
+import { getFoodsItems, deleteFood } from '../services/foodApi';
 import { VKCEntity } from '../../../types';
 import './food-dashboard.css';
 
@@ -17,7 +17,8 @@ const FoodDashboard = () => {
             try {
                 const response = await getFoodsItems(1, 50);
                 if (response.success) {
-                    setItems(response.Data);
+                    const data = Array.isArray(response.Data) ? response.Data : [response.Data];
+                    setItems(data);
                 } else {
                     setError(response.message);
                 }
@@ -34,7 +35,24 @@ const FoodDashboard = () => {
 
     const getItemId = (item: VKCEntity) => {
         if (typeof item._id === 'string') return item._id;
-        return item._id.$oid;
+        return item._id?.$oid || '';
+    };
+
+    const handleDelete = async (id: string, name: string) => {
+        if (window.confirm(`Are you sure you want to delete "${name}"?`)) {
+            try {
+                const response = await deleteFood(id);
+                if (response.success) {
+                    setItems(prev => prev.filter(item => getItemId(item) !== id));
+                    alert('Food item deleted successfully');
+                } else {
+                    alert(response.message || 'Failed to delete food item');
+                }
+            } catch (err) {
+                console.error('Delete error:', err);
+                alert('An error occurred while deleting the food item');
+            }
+        }
     };
 
     return (
@@ -74,8 +92,18 @@ const FoodDashboard = () => {
                                     <h3>{item.Title}</h3>
                                     <p className="subtitle">{item.SubTitle}</p>
                                     <div className="card-actions">
-                                        <button className="edit-btn">Edit</button>
-                                        <button className="delete-btn">Delete</button>
+                                        <button
+                                            className="edit-btn"
+                                            onClick={() => navigate(`/food/edit/${getItemId(item)}`)}
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            className="delete-btn"
+                                            onClick={() => handleDelete(getItemId(item), item.Title)}
+                                        >
+                                            Delete
+                                        </button>
                                     </div>
                                 </div>
                             </div>

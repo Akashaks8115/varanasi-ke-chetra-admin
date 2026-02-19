@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getSpiritualPackages } from '../services/spiritualApi';
+import { getSpiritualPackages, deleteSpiritual } from '../services/spiritualApi';
 import { SpiritualPackage } from '../../../types';
 import './spiritual-dashboard.css';
 
@@ -17,7 +17,8 @@ const SpiritualDashboard = () => {
             try {
                 const response = await getSpiritualPackages('');
                 if (response.success) {
-                    setItems(response.data);
+                    const data = Array.isArray(response.data) ? response.data : [response.data];
+                    setItems(data);
                 } else {
                     setError(response.message);
                 }
@@ -30,6 +31,23 @@ const SpiritualDashboard = () => {
         };
         fetchData();
     }, []);
+
+    const handleDelete = async (id: string, title: string) => {
+        if (window.confirm(`Are you sure you want to delete "${title}"?`)) {
+            try {
+                const response = await deleteSpiritual(id);
+                if (response.success) {
+                    setItems(prev => prev.filter(item => item._id !== id));
+                    alert('Package deleted successfully');
+                } else {
+                    alert(response.message || 'Failed to delete package');
+                }
+            } catch (err) {
+                console.error('Delete error:', err);
+                alert('An error occurred while deleting the package');
+            }
+        }
+    };
 
     return (
         <div className="spiritual-dashboard">
@@ -84,8 +102,18 @@ const SpiritualDashboard = () => {
                                     )}
 
                                     <div className="card-actions">
-                                        <button className="edit-btn">Edit</button>
-                                        <button className="delete-btn">Delete</button>
+                                        <button
+                                            className="edit-btn"
+                                            onClick={() => navigate(`/spiritual/edit/${item._id}`)}
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            className="delete-btn"
+                                            onClick={() => handleDelete(item._id, item.title)}
+                                        >
+                                            Delete
+                                        </button>
                                     </div>
                                 </div>
                             </div>

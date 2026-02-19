@@ -16,10 +16,10 @@ export interface VKCEntity {
 export interface ApiResponse<T> {
     success: boolean;
     message: string;
-    TotalCount: number;
-    PageIndex: number;
-    PageSize: number;
-    Data: T[];
+    TotalCount?: number;
+    PageIndex?: number;
+    PageSize?: number;
+    Data: T[] | T; // Can be an array for 'get' or a single object for 'insert/update'
 }
 
 export interface OurService {
@@ -51,7 +51,7 @@ export interface SpiritualPackage {
 export interface SpiritualApiResponse {
     success: boolean;
     message: string;
-    data: SpiritualPackage[];
+    data: SpiritualPackage[] | SpiritualPackage;
 }
 
 export interface TransportVehicle {

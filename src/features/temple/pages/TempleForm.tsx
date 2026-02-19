@@ -1,11 +1,17 @@
-import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Upload, X } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ArrowLeft, Upload, X, Loader2 } from 'lucide-react';
+import { uploadImage } from '../../../services/uploadApi';
+import { getTemplesItems, insertTemple, updateTemple } from '../services/templeApi';
 import './temple-form.css';
 
 const TempleForm = () => {
+    const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [previews, setPreviews] = useState<{ [key: string]: string }>({});
+    const [files, setFiles] = useState<{ [key: string]: File }>({});
+    const [loading, setLoading] = useState(false);
+    const [fetching, setFetching] = useState(false);
 
     const [formData, setFormData] = useState({
         Title: '',
@@ -24,6 +30,41 @@ const TempleForm = () => {
         BannerUrl2: useRef<HTMLInputElement>(null)
     };
 
+    useEffect(() => {
+        if (id) {
+            const fetchTemple = async () => {
+                setFetching(true);
+                try {
+                    const response = await getTemplesItems(1, 1, id);
+                    const dataArray = Array.isArray(response.Data) ? response.Data : [response.Data];
+                    if (response.success && dataArray.length > 0) {
+                        const data = dataArray[0];
+                        setFormData({
+                            Title: data.Title || '',
+                            SubTitle: data.SubTitle || '',
+                            Description1: data.Description1 || '',
+                            Description2: data.Description2 || '',
+                            Description3: data.Description3 || '',
+                            Location: data.Location || '',
+                            Address: data.Address || '',
+                            IsShow: data.IsShow ?? 1
+                        });
+                        setPreviews({
+                            ProfileUrl: data.ProfileUrl || '',
+                            BannerUrl1: data.BannerUrl1 || '',
+                            BannerUrl2: data.BannerUrl2 || ''
+                        });
+                    }
+                } catch (err) {
+                    console.error('Fetch error:', err);
+                } finally {
+                    setFetching(false);
+                }
+            };
+            fetchTemple();
+        }
+    }, [id]);
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
@@ -32,6 +73,7 @@ const TempleForm = () => {
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
         const file = e.target.files?.[0];
         if (file) {
+            setFiles(prev => ({ ...prev, [fieldName]: file }));
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreviews(prev => ({ ...prev, [fieldName]: reader.result as string }));
@@ -46,17 +88,56 @@ const TempleForm = () => {
             delete newPreviews[fieldName];
             return newPreviews;
         });
+        setFiles(prev => {
+            const newFiles = { ...prev };
+            delete newFiles[fieldName];
+            return newFiles;
+        });
         if (fileInputRefs[fieldName as keyof typeof fileInputRefs].current) {
             fileInputRefs[fieldName as keyof typeof fileInputRefs].current!.value = '';
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Submitting Temple Data:', formData);
-        console.log('Images (Base64/Files):', previews);
-        alert('Temple submitted successfully (Check console for data)');
-        navigate('/temple');
+        setLoading(true);
+
+        try {
+            const finalData = { ...formData } as any;
+
+            // 1. Upload images
+            for (const field of ['ProfileUrl', 'BannerUrl1', 'BannerUrl2']) {
+                const file = files[field];
+                if (file) {
+                    const uploadRes = await uploadImage(file, `Varanasi Ke Chetra/Temple/${formData.Title}`);
+                    if (uploadRes.success) {
+                        finalData[field] = uploadRes.url || uploadRes.imageUrl;
+                    }
+                } else if (previews[field]) {
+                    // Keep existing URL if not changed
+                    finalData[field] = previews[field];
+                }
+            }
+
+            let response;
+            if (id) {
+                response = await updateTemple(id, finalData);
+            } else {
+                response = await insertTemple(finalData);
+            }
+
+            if (response.success) {
+                alert(id ? 'Temple updated successfully!' : 'Temple added successfully!');
+                navigate('/temple');
+            } else {
+                alert(response.message || 'Failed to save temple');
+            }
+        } catch (error: any) {
+            console.error('Submit error:', error);
+            alert(error.message || 'An error occurred while saving the temple');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -65,141 +146,155 @@ const TempleForm = () => {
                 <button className="back-btn" onClick={() => navigate(-1)}>
                     <ArrowLeft size={20} />
                 </button>
-                <h2>Add New Temple</h2>
+                <h2>{id ? 'Edit Temple' : 'Add New Temple'}</h2>
             </header>
 
-            <form onSubmit={handleSubmit} className="modern-form">
-                <div className="form-grid">
-                    <div className="form-left">
-                        <div className="section">
-                            <h3>Basic Information</h3>
-                            <div className="form-group">
-                                <label>Title</label>
-                                <input
-                                    type="text"
-                                    name="Title"
-                                    value={formData.Title}
-                                    onChange={handleInputChange}
-                                    placeholder="Enter temple title (e.g. Kashi Vishwanath)"
-                                    required
-                                />
+            {fetching ? (
+                <div className="fetching-loader">
+                    <Loader2 className="animate-spin" />
+                    <span>Loading temple data...</span>
+                </div>
+            ) : (
+                <form onSubmit={handleSubmit} className="modern-form">
+                    <div className="form-grid">
+                        <div className="form-left">
+                            <div className="section">
+                                <h3>Basic Information</h3>
+                                <div className="form-group">
+                                    <label>Title</label>
+                                    <input
+                                        type="text"
+                                        name="Title"
+                                        value={formData.Title}
+                                        onChange={handleInputChange}
+                                        placeholder="Enter temple title (e.g. Kashi Vishwanath)"
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Sub Title</label>
+                                    <input
+                                        type="text"
+                                        name="SubTitle"
+                                        value={formData.SubTitle}
+                                        onChange={handleInputChange}
+                                        placeholder="Enter short subtitle"
+                                    />
+                                </div>
                             </div>
-                            <div className="form-group">
-                                <label>Sub Title</label>
-                                <input
-                                    type="text"
-                                    name="SubTitle"
-                                    value={formData.SubTitle}
-                                    onChange={handleInputChange}
-                                    placeholder="Enter short subtitle"
-                                />
+
+                            <div className="section">
+                                <h3>Descriptions</h3>
+                                <div className="form-group">
+                                    <label>Description 1</label>
+                                    <textarea
+                                        name="Description1"
+                                        value={formData.Description1}
+                                        onChange={handleInputChange}
+                                        placeholder="Primary description"
+                                        rows={3}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Description 2</label>
+                                    <textarea
+                                        name="Description2"
+                                        value={formData.Description2}
+                                        onChange={handleInputChange}
+                                        placeholder="Secondary description"
+                                        rows={3}
+                                    />
+                                </div>
                             </div>
                         </div>
 
-                        <div className="section">
-                            <h3>Descriptions</h3>
-                            <div className="form-group">
-                                <label>Description 1</label>
-                                <textarea
-                                    name="Description1"
-                                    value={formData.Description1}
-                                    onChange={handleInputChange}
-                                    placeholder="Primary description"
-                                    rows={3}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Description 2</label>
-                                <textarea
-                                    name="Description2"
-                                    value={formData.Description2}
-                                    onChange={handleInputChange}
-                                    placeholder="Secondary description"
-                                    rows={3}
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="form-right">
-                        <div className="section">
-                            <h3>Media Assets</h3>
-                            <div className="image-pickers">
-                                {Object.keys(fileInputRefs).map((field) => (
-                                    <div key={field} className="image-picker-group">
-                                        <label>{field.replace('Url', '').replace('1', ' 1').replace('2', ' 2')}</label>
-                                        <div
-                                            className="picker-box"
-                                            onClick={() => fileInputRefs[field as keyof typeof fileInputRefs].current?.click()}
-                                        >
-                                            {previews[field] ? (
-                                                <div className="preview-container">
-                                                    <img src={previews[field]} alt="preview" />
-                                                    <button
-                                                        type="button"
-                                                        className="remove-img"
-                                                        onClick={(e) => { e.stopPropagation(); removeImage(field); }}
-                                                    >
-                                                        <X size={14} />
-                                                    </button>
-                                                </div>
-                                            ) : (
-                                                <div className="picker-placeholder">
-                                                    <Upload size={24} />
-                                                    <span>Select Image</span>
-                                                </div>
-                                            )}
-                                            <input
-                                                type="file"
-                                                hidden
-                                                ref={fileInputRefs[field as keyof typeof fileInputRefs]}
-                                                accept="image/*"
-                                                onChange={(e) => handleFileChange(e, field)}
-                                            />
+                        <div className="form-right">
+                            <div className="section">
+                                <h3>Media Assets</h3>
+                                <div className="image-pickers">
+                                    {Object.keys(fileInputRefs).map((field) => (
+                                        <div key={field} className="image-picker-group">
+                                            <label>{field.replace('Url', '').replace('1', ' 1').replace('2', ' 2')}</label>
+                                            <div
+                                                className="picker-box"
+                                                onClick={() => fileInputRefs[field as keyof typeof fileInputRefs].current?.click()}
+                                            >
+                                                {previews[field] ? (
+                                                    <div className="preview-container">
+                                                        <img src={previews[field]} alt="preview" />
+                                                        <button
+                                                            type="button"
+                                                            className="remove-img"
+                                                            onClick={(e) => { e.stopPropagation(); removeImage(field); }}
+                                                        >
+                                                            <X size={14} />
+                                                        </button>
+                                                    </div>
+                                                ) : (
+                                                    <div className="picker-placeholder">
+                                                        <Upload size={24} />
+                                                        <span>Select Image</span>
+                                                    </div>
+                                                )}
+                                                <input
+                                                    type="file"
+                                                    hidden
+                                                    ref={fileInputRefs[field as keyof typeof fileInputRefs]}
+                                                    accept="image/*"
+                                                    onChange={(e) => handleFileChange(e, field)}
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
-                        </div>
 
-                        <div className="section">
-                            <h3>Location & Visibility</h3>
-                            <div className="form-group">
-                                <label>Google Maps Link</label>
-                                <input
-                                    type="text"
-                                    name="Location"
-                                    value={formData.Location}
-                                    onChange={handleInputChange}
-                                    placeholder="https://maps.app.goo.gl/..."
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Physical Address</label>
-                                <input
-                                    type="text"
-                                    name="Address"
-                                    value={formData.Address}
-                                    onChange={handleInputChange}
-                                    placeholder="Enter full address"
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Status</label>
-                                <select name="IsShow" value={formData.IsShow} onChange={handleInputChange}>
-                                    <option value={1}>Visible</option>
-                                    <option value={0}>Hidden</option>
-                                </select>
+                            <div className="section">
+                                <h3>Location & Visibility</h3>
+                                <div className="form-group">
+                                    <label>Google Maps Link</label>
+                                    <input
+                                        type="text"
+                                        name="Location"
+                                        value={formData.Location}
+                                        onChange={handleInputChange}
+                                        placeholder="https://maps.app.goo.gl/..."
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Physical Address</label>
+                                    <input
+                                        type="text"
+                                        name="Address"
+                                        value={formData.Address}
+                                        onChange={handleInputChange}
+                                        placeholder="Enter full address"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Status</label>
+                                    <select name="IsShow" value={formData.IsShow} onChange={handleInputChange}>
+                                        <option value={1}>Visible</option>
+                                        <option value={0}>Hidden</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div className="form-footer">
-                    <button type="button" className="cancel-btn" onClick={() => navigate(-1)}>Cancel</button>
-                    <button type="submit" className="submit-btn">Save Temple</button>
-                </div>
-            </form>
+                    <div className="form-footer">
+                        <button type="button" className="cancel-btn" onClick={() => navigate(-1)} disabled={loading}>Cancel</button>
+                        <button type="submit" className="submit-btn" disabled={loading}>
+                            {loading ? (
+                                <>
+                                    <Loader2 size={18} className="animate-spin" />
+                                    Saving...
+                                </>
+                            ) : 'Save Temple'}
+                        </button>
+                    </div>
+                </form>
+            )}
         </div>
     );
 };

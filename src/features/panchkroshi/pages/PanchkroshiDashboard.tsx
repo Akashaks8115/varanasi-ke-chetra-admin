@@ -17,7 +17,8 @@ const PanchkroshiDashboard = () => {
             try {
                 const response = await getPanchkroshiItems(1, 50);
                 if (response.success) {
-                    setItems(response.Data);
+                    const data = Array.isArray(response.Data) ? response.Data : [response.Data];
+                    setItems(data);
                 } else {
                     setError(response.message);
                 }
