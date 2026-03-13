@@ -25,7 +25,7 @@ import {
 } from 'lucide-react'
 
 const menu = [
-    { label: 'Dashboard', icon: <LayoutDashboard />, path: '/' },
+    { label: 'Dashboard', icon: <LayoutDashboard />, path: '/', target: '_blank' },
     { label: 'Activity', icon: <Activity />, path: '/activity' },
     { label: 'Data', icon: <Database />, path: '/data' },
     { label: 'Events', icon: <Calendar />, path: '/events' },
@@ -65,6 +65,7 @@ const Sidebar = () => {
                     <NavLink
                         key={item.label}
                         to={item.path}
+                        target={item.target}
                         className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}
                     >
                         <span className="icon">{item.icon}</span>
