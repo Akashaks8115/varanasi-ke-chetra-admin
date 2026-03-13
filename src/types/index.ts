@@ -92,18 +92,20 @@ export interface TravelEnquiry {
 
 export interface FlightEnquiriesApiResponse {
     success: boolean;
-    total: number;
-    page: number;
-    totalPages: number;
-    data: TravelEnquiry[];
+    message: string;
+    TotalCount: number;
+    PageIndex: number;
+    PageSize: number;
+    Data: TravelEnquiry[];
 }
 
 export interface VisaEnquiriesApiResponse {
     success: boolean;
-    total: number;
-    page: number;
-    totalPages: number;
-    data: TravelEnquiry[];
+    message: string;
+    TotalCount: number;
+    PageIndex: number;
+    PageSize: number;
+    Data: TravelEnquiry[];
 }
 
 export interface ImageUploadResponse {

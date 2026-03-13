@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Upload, X, Loader2 } from 'lucide-react';
 import { uploadImage } from '../../../services/uploadApi';
 import { getGhatsItems, insertGhat, updateGhat } from '../../ghat/services/ghatApi';
+import { getJyotirlingItems, insertJyotirling, updateJyotirling } from '../../jyotirling/services/jyotirlingApi';
 import './entity-form.css';
 
 const EntityForm = () => {
@@ -39,6 +40,14 @@ const EntityForm = () => {
                     let data;
                     if (category === 'ghat') {
                         const response = await getGhatsItems(1, 1, id);
+                        if (response.success) {
+                            const responseData = Array.isArray(response.Data) ? response.Data : [response.Data];
+                            if (responseData.length > 0) {
+                                data = responseData[0];
+                            }
+                        }
+                    } else if (category === 'jyotirling') {
+                        const response = await getJyotirlingItems(1, 1, id);
                         if (response.success) {
                             const responseData = Array.isArray(response.Data) ? response.Data : [response.Data];
                             if (responseData.length > 0) {
@@ -140,6 +149,16 @@ const EntityForm = () => {
                     message = response.message;
                 } else {
                     const response = await insertGhat(finalData);
+                    success = response.success;
+                    message = response.message;
+                }
+            } else if (category === 'jyotirling') {
+                if (id) {
+                    const response = await updateJyotirling(id, finalData);
+                    success = response.success;
+                    message = response.message;
+                } else {
+                    const response = await insertJyotirling(finalData);
                     success = response.success;
                     message = response.message;
                 }

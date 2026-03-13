@@ -12,12 +12,17 @@ export const getGhatsItems = async (pageIndex: number = 1, pageSize: number = 10
 };
 
 export const insertGhat = async (data: Partial<VKCEntity>): Promise<ApiResponse<VKCEntity>> => {
+    console.log('Inserting new ghat:', data);
     const response = await http.post<ApiResponse<VKCEntity>>(ENDPOINTS.INSERT_GHAT, data);
+    console.log('Insert Ghat Response:', response.data);
     return response.data;
 };
 
 export const updateGhat = async (id: string, data: Partial<VKCEntity>): Promise<ApiResponse<VKCEntity>> => {
+    console.log(`Updating ghat with ID: ${id}`, data);
     const response = await http.patch<ApiResponse<VKCEntity>>(`${ENDPOINTS.UPDATE_GHAT}/${id}`, data);
+
+    console.log('Update Ghat Response:', response.data);
     return response.data;
 };
 

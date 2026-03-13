@@ -21,8 +21,12 @@ const VisaDashboard = () => {
             try {
                 const response = await getVisaEnquiries();
                 if (response.success) {
-                    setItems(response.data);
-                    setTotalInfo({ total: response.total, page: response.page, totalPages: response.totalPages });
+                    setItems(response.Data || []);
+                    setTotalInfo({
+                        total: response.TotalCount || 0,
+                        page: response.PageIndex || 1,
+                        totalPages: Math.ceil((response.TotalCount || 0) / (response.PageSize || 10))
+                    });
                 } else {
                     setError('Failed to load visa enquiries.');
                 }
