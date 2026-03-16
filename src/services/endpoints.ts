@@ -30,4 +30,9 @@ export const ENDPOINTS = {
     INSERT_FOOD: 'food/insertFood',
     UPDATE_FOOD: 'food/updateFood',
     DELETE_FOOD: 'food/deleteFood',
+    GET_TOKENS: 'get-tokens',
+    BANNER_LIST: 'banner/Banners',
+    INSERT_BANNER: 'banner/insertBanner',
+    UPDATE_BANNER: 'banner/updateBanner',
+    DELETE_BANNER: 'banner/deleteBanner',
 } as const;

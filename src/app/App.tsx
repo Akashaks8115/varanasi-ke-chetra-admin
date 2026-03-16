@@ -23,6 +23,9 @@ import TransportForm from '../features/transport/pages/TransportForm'
 import FlightsDashboard from '../features/flights/pages/FlightsDashboard'
 import VisaDashboard from '../features/visa/pages/VisaDashboard'
 import SendNotificationPage from '../features/notifications/pages/SendNotificationPage'
+import UserTokenDashboard from '../features/user-token/pages/UserTokenDashboard'
+import BannerDashboard from '../features/banner/pages/BannerDashboard'
+import BannerForm from '../features/banner/pages/BannerForm'
 
 const App = () => {
     return (
@@ -54,6 +57,10 @@ const App = () => {
                     <Route path="/flights" element={<FlightsDashboard />} />
                     <Route path="/visa" element={<VisaDashboard />} />
                     <Route path="/send-notification" element={<SendNotificationPage />} />
+                    <Route path="/user-token" element={<UserTokenDashboard />} />
+                    <Route path="/banner" element={<BannerDashboard />} />
+                    <Route path="/banner/add" element={<BannerForm />} />
+                    <Route path="/banner/edit/:id" element={<BannerForm />} />
                     <Route path=":category" element={<DataDashboard />} />
                     <Route path=":category/add" element={<EntityForm />} />
                     <Route path=":category/edit/:id" element={<EntityForm />} />

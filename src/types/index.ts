@@ -130,3 +130,29 @@ export interface NotificationApiResponse {
     success: boolean;
     message: string;
 }
+
+export interface UserToken {
+    _id: string | { $oid: string };
+    token: string;
+    userId: string;
+    __v: number;
+}
+
+export interface UserTokenApiResponse {
+    success: boolean;
+    data: UserToken[];
+}
+
+export interface Banner {
+    _id?: string;
+    title: string;
+    subtitle: string;
+    imageUrl: string;
+    redirectUrl: string;
+    isActive: boolean;
+}
+
+export interface BannerApiResponse {
+    success: boolean;
+    data: Banner[] | Banner;
+}

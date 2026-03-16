@@ -21,7 +21,8 @@ import {
     Plane,
     Bus,
     FileText,
-    LogOut
+    LogOut,
+    Key
 } from 'lucide-react'
 
 const menu = [
@@ -40,6 +41,7 @@ const menu = [
     { label: 'Transport Service', icon: <Bus />, path: '/transport' },
     { label: 'Visa Enquiries', icon: <FileText />, path: '/visa' },
     { label: 'Send Notification', icon: <Bell />, path: '/send-notification' },
+    { label: 'User Token', icon: <Key />, path: '/user-token' },
     { label: 'Shaktipeeth', icon: <Sparkles />, path: '/shaktipeeth' },
     { label: 'Version', icon: <Tag />, path: '/version' },
     { label: 'auth', icon: <Lock />, path: '/auth' },
