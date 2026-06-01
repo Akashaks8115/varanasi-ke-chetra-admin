@@ -26,7 +26,7 @@ import {
 } from 'lucide-react'
 
 const menu = [
-    { label: 'Dashboard', icon: <LayoutDashboard />, path: '/', target: '_blank' },
+    { label: 'Dashboard', icon: <LayoutDashboard />, path: '/' },
     { label: 'Activity', icon: <Activity />, path: '/activity' },
     { label: 'Data', icon: <Database />, path: '/data' },
     { label: 'Events', icon: <Calendar />, path: '/events' },

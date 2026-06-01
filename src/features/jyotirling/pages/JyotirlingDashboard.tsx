@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getJyotirlingItems } from '../services/jyotirlingApi';
+import { getJyotirlingItems, deleteJyotirling } from '../services/jyotirlingApi';
 import { VKCEntity } from '../../../types';
 import './jyotirling-dashboard.css';
 
@@ -38,6 +38,22 @@ const JyotirlingDashboard = () => {
         return item._id.$oid;
     };
 
+    const handleDelete = async (id: string) => {
+        if (window.confirm('Are you sure you want to delete this Jyotirlinga?')) {
+            try {
+                const response = await deleteJyotirling(id);
+                if (response.success) {
+                    setItems(items.filter(item => getItemId(item) !== id));
+                } else {
+                    alert('Failed to delete: ' + response.message);
+                }
+            } catch (err) {
+                alert('An error occurred while deleting.');
+                console.error(err);
+            }
+        }
+    };
+
     return (
         <div className="jyotirling-dashboard">
             <header className="dashboard-header">
@@ -60,7 +76,7 @@ const JyotirlingDashboard = () => {
                         items.map((item) => (
                             <div key={getItemId(item)} className="item-card">
                                 <div className="card-image">
-                                    <img src={item.ProfileUrl} alt={item.Title} onError={(e) => {
+                                    <img src={item.ProfileUrl || 'https://via.placeholder.com/300x200?text=No+Image'} alt={item.Title} onError={(e) => {
                                         (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x200?text=No+Image';
                                     }} />
                                     <div className="status-badge" data-show={item.IsShow !== 0}>
@@ -72,8 +88,8 @@ const JyotirlingDashboard = () => {
                                     <p className="subtitle">{item.SubTitle}</p>
                                     {item.Address && <p className="address">📍 {item.Address}</p>}
                                     <div className="card-actions">
-                                        <button className="edit-btn">Edit</button>
-                                        <button className="delete-btn">Delete</button>
+                                        <button className="edit-btn" onClick={() => navigate(`/jyotirling/edit/${getItemId(item)}`)}>Edit</button>
+                                        <button className="delete-btn" onClick={() => handleDelete(getItemId(item))}>Delete</button>
                                     </div>
                                 </div>
                             </div>

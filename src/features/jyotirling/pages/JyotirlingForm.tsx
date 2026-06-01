@@ -1,10 +1,12 @@
 import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Upload, X } from 'lucide-react';
+import { getJyotirlingItems, insertJyotirling, updateJyotirling } from '../services/jyotirlingApi';
 import './jyotirling-form.css';
 
 const JyotirlingForm = () => {
     const navigate = useNavigate();
+    const { id } = useParams<{ id: string }>();
     const [previews, setPreviews] = useState<{ [key: string]: string }>({});
 
     const [formData, setFormData] = useState({
@@ -23,6 +25,37 @@ const JyotirlingForm = () => {
         BannerUrl1: useRef<HTMLInputElement>(null),
         BannerUrl2: useRef<HTMLInputElement>(null)
     };
+
+    React.useEffect(() => {
+        if (id) {
+            const fetchDetails = async () => {
+                try {
+                    const response = await getJyotirlingItems(1, 10, id);
+                    if (response.success && response.Data && response.Data.length > 0) {
+                        const data = response.Data[0];
+                        setFormData({
+                            Title: data.Title || '',
+                            SubTitle: data.SubTitle || '',
+                            Description1: data.Description1 || '',
+                            Description2: data.Description2 || '',
+                            Description3: data.Description3 || '',
+                            Location: data.Location || '',
+                            Address: data.Address || '',
+                            IsShow: data.IsShow !== undefined ? data.IsShow : 1
+                        });
+                        setPreviews({
+                            ProfileUrl: data.ProfileUrl || '',
+                            BannerUrl1: data.BannerUrl1 || '',
+                            BannerUrl2: data.BannerUrl2 || ''
+                        });
+                    }
+                } catch (err) {
+                    console.error("Failed to fetch Jyotirling details:", err);
+                }
+            };
+            fetchDetails();
+        }
+    }, [id]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -51,12 +84,28 @@ const JyotirlingForm = () => {
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Submitting Jyotirling Data:', formData);
-        console.log('Images (Base64/Files):', previews);
-        alert('Jyotirling submitted successfully (Check console for data)');
-        navigate('/jyotirling');
+        try {
+            const payload = {
+                ...formData,
+                ProfileUrl: previews.ProfileUrl || '',
+                BannerUrl1: previews.BannerUrl1 || '',
+                BannerUrl2: previews.BannerUrl2 || ''
+            };
+
+            if (id) {
+                await updateJyotirling(id, payload);
+                alert('Jyotirling updated successfully');
+            } else {
+                await insertJyotirling(payload);
+                alert('Jyotirling added successfully');
+            }
+            navigate('/jyotirling');
+        } catch (err) {
+            console.error("Failed to save Jyotirling:", err);
+            alert('An error occurred while saving.');
+        }
     };
 
     return (
@@ -65,7 +114,7 @@ const JyotirlingForm = () => {
                 <button className="back-btn" onClick={() => navigate(-1)}>
                     <ArrowLeft size={20} />
                 </button>
-                <h2>Add New Jyotirlinga</h2>
+                <h2>{id ? 'Edit Jyotirlinga' : 'Add New Jyotirlinga'}</h2>
             </header>
 
             <form onSubmit={handleSubmit} className="modern-form">

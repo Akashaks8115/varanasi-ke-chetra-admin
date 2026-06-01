@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import AdminLayout from '../layouts/AdminLayout'
+import AppDashboard from '../features/dashboard/pages/AppDashboard'
 import DataDashboard from '../features/dashboard/pages/DataDashboard'
 import EntityForm from '../features/dashboard/pages/EntityForm'
 import GhatDashboard from '../features/ghat/pages/GhatDashboard'
@@ -32,7 +33,7 @@ const App = () => {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<AdminLayout />}>
-                    <Route index element={<Navigate to="/ghat" replace />} />
+                    <Route index element={<AppDashboard />} />
                     <Route path="/ghat" element={<GhatDashboard />} />
                     <Route path="/ghat/add" element={<GhatForm />} />
                     <Route path="/temple" element={<TempleDashboard />} />
@@ -43,6 +44,7 @@ const App = () => {
                     <Route path="/historical-place/edit/:id" element={<HistoricalPlaceForm />} />
                     <Route path="/jyotirling" element={<JyotirlingDashboard />} />
                     <Route path="/jyotirling/add" element={<JyotirlingForm />} />
+                    <Route path="/jyotirling/edit/:id" element={<JyotirlingForm />} />
                     <Route path="/food" element={<FoodDashboard />} />
                     <Route path="/food/add" element={<FoodForm />} />
                     <Route path="/food/edit/:id" element={<FoodForm />} />
