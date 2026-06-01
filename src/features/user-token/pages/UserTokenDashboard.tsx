@@ -57,6 +57,7 @@ const UserTokenDashboard = () => {
                     <table className="tokens-table">
                         <thead>
                             <tr>
+                                <th>S.No</th>
                                 <th>User ID</th>
                                 <th>Token</th>
                                 <th>Actions</th>
@@ -64,10 +65,11 @@ const UserTokenDashboard = () => {
                         </thead>
                         <tbody>
                             {tokens.length > 0 ? (
-                                tokens.map((token) => {
+                                tokens.map((token, index) => {
                                     const tokenId = typeof token._id === 'string' ? token._id : token._id?.$oid || '';
                                     return (
                                         <tr key={tokenId}>
+                                            <td>{index + 1}</td>
                                             <td className="user-id">{token.userId}</td>
                                             <td className="token-cell">
                                                 <div className="token-text">{token.token}</div>
@@ -85,7 +87,7 @@ const UserTokenDashboard = () => {
                                 })
                             ) : (
                                 <tr>
-                                    <td colSpan={3} className="no-data">No tokens found.</td>
+                                    <td colSpan={4} className="no-data">No tokens found.</td>
                                 </tr>
                             )}
                         </tbody>

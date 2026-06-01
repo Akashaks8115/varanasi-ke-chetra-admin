@@ -2,9 +2,10 @@ import http from '../../../services/http';
 import { ENDPOINTS } from '../../../services/endpoints';
 import { VKCEntity, ApiResponse } from '../../../types';
 
-export const getHistoricalPlacesItems = async (pageIndex: number = 1, pageSize: number = 10, id: string = ""): Promise<ApiResponse<VKCEntity>> => {
+export const getHistoricalPlacesItems = async (pageIndex: number = 1, pageSize: number = 10, id: string = "", name: string = ""): Promise<ApiResponse<VKCEntity>> => {
     const response = await http.post<ApiResponse<VKCEntity>>(ENDPOINTS.HISTORICAL_PLACE_LIST, {
         id: id,
+        Name: name,
         PageIndex: pageIndex,
         PageSize: pageSize
     });
@@ -17,11 +18,11 @@ export const insertHistoricalPlace = async (data: Partial<VKCEntity>): Promise<A
 };
 
 export const updateHistoricalPlace = async (id: string, data: Partial<VKCEntity>): Promise<ApiResponse<VKCEntity>> => {
-    const response = await http.patch<ApiResponse<VKCEntity>>(`${ENDPOINTS.UPDATE_HISTORICAL_PLACE}/${id}`, data);
+    const response = await http.post<ApiResponse<VKCEntity>>(ENDPOINTS.UPDATE_HISTORICAL_PLACE, { id, ...data });
     return response.data;
 };
 
 export const deleteHistoricalPlace = async (id: string): Promise<ApiResponse<VKCEntity>> => {
-    const response = await http.delete<ApiResponse<VKCEntity>>(`${ENDPOINTS.DELETE_HISTORICAL_PLACE}/${id}`);
+    const response = await http.post<ApiResponse<VKCEntity>>(ENDPOINTS.DELETE_HISTORICAL_PLACE, { id });
     return response.data;
 };

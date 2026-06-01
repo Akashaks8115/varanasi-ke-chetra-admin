@@ -89,7 +89,7 @@ const DataDashboard = () => {
                             <div key={getItemId(item)} className="item-card">
                                 <div className="card-image">
                                     <img src={item.ProfileUrl} alt={item.Title} onError={(e) => {
-                                        (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x200?text=No+Image';
+                                        (e.target as HTMLImageElement).src = '/no-image.svg';
                                     }} />
                                     <div className="status-badge" data-show={item.IsShow !== 0}>
                                         {item.IsShow !== 0 ? 'Visible' : 'Hidden'}

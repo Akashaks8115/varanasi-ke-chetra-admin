@@ -1,10 +1,12 @@
 import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Upload, X } from 'lucide-react';
+import { getPanchkroshiItems, insertPanchkroshi, updatePanchkroshi } from '../services/panchkroshiApi';
 import './panchkroshi-form.css';
 
 const PanchkroshiForm = () => {
     const navigate = useNavigate();
+    const { id } = useParams<{ id: string }>();
     const [previews, setPreviews] = useState<{ [key: string]: string }>({});
 
     const [formData, setFormData] = useState({
@@ -23,6 +25,37 @@ const PanchkroshiForm = () => {
         BannerUrl1: useRef<HTMLInputElement>(null),
         BannerUrl2: useRef<HTMLInputElement>(null)
     };
+
+    React.useEffect(() => {
+        if (id) {
+            const fetchDetails = async () => {
+                try {
+                    const response = await getPanchkroshiItems(1, 10, id);
+                    if (response.success && response.Data && response.Data.length > 0) {
+                        const data = response.Data[0];
+                        setFormData({
+                            Title: data.Title || '',
+                            SubTitle: data.SubTitle || '',
+                            Description1: data.Description1 || '',
+                            Description2: data.Description2 || '',
+                            Description3: data.Description3 || '',
+                            Location: data.Location || '',
+                            Address: data.Address || '',
+                            IsShow: data.IsShow !== undefined ? data.IsShow : 1
+                        });
+                        setPreviews({
+                            ProfileUrl: data.ProfileUrl || '',
+                            BannerUrl1: data.BannerUrl1 || '',
+                            BannerUrl2: data.BannerUrl2 || ''
+                        });
+                    }
+                } catch (err) {
+                    console.error("Failed to fetch Panchkroshi details:", err);
+                }
+            };
+            fetchDetails();
+        }
+    }, [id]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -51,12 +84,28 @@ const PanchkroshiForm = () => {
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Submitting Panchkroshi Place Data:', formData);
-        console.log('Images:', previews);
-        alert('Panchkroshi place submitted successfully (Check console for data)');
-        navigate('/panchkroshi');
+        try {
+            const payload = {
+                ...formData,
+                ProfileUrl: previews.ProfileUrl || '',
+                BannerUrl1: previews.BannerUrl1 || '',
+                BannerUrl2: previews.BannerUrl2 || ''
+            };
+
+            if (id) {
+                await updatePanchkroshi(id, payload);
+                alert('Panchkroshi place updated successfully');
+            } else {
+                await insertPanchkroshi(payload);
+                alert('Panchkroshi place added successfully');
+            }
+            navigate('/panchkroshi');
+        } catch (err) {
+            console.error("Failed to save Panchkroshi place:", err);
+            alert('An error occurred while saving.');
+        }
     };
 
     return (
@@ -65,7 +114,7 @@ const PanchkroshiForm = () => {
                 <button className="back-btn" onClick={() => navigate(-1)}>
                     <ArrowLeft size={20} />
                 </button>
-                <h2>Add New Panchkroshi Place</h2>
+                <h2>{id ? 'Edit Panchkroshi Place' : 'Add New Panchkroshi Place'}</h2>
             </header>
 
             <form onSubmit={handleSubmit} className="modern-form">

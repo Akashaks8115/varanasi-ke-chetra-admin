@@ -76,8 +76,8 @@ const JyotirlingDashboard = () => {
                         items.map((item) => (
                             <div key={getItemId(item)} className="item-card">
                                 <div className="card-image">
-                                    <img src={item.ProfileUrl || 'https://via.placeholder.com/300x200?text=No+Image'} alt={item.Title} onError={(e) => {
-                                        (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x200?text=No+Image';
+                                    <img src={item.ProfileUrl || '/no-image.svg'} alt={item.Title} onError={(e) => {
+                                        (e.target as HTMLImageElement).src = '/no-image.svg';
                                     }} />
                                     <div className="status-badge" data-show={item.IsShow !== 0}>
                                         {item.IsShow !== 0 ? 'Visible' : 'Hidden'}

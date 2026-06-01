@@ -1,0 +1,154 @@
+.activity-dashboard {
+    padding: 24px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.activity-dashboard .dashboard-header {
+    margin-bottom: 24px;
+}
+
+.activity-dashboard .dashboard-header h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--secondary);
+}
+
+.activity-dashboard .add-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.activity-dashboard .add-btn:hover {
+    background: #e65a00;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.2);
+}
+
+.activity-dashboard .items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.activity-dashboard .item-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.activity-dashboard .item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.activity-dashboard .card-image {
+    width: 100%;
+    height: 200px;
+    position: relative;
+}
+
+.activity-dashboard .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.activity-dashboard .card-content {
+    padding: 20px;
+}
+
+.activity-dashboard .card-content h3 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    color: var(--secondary);
+}
+
+.activity-dashboard .subtitle {
+    color: #64748b;
+    font-size: 14px;
+    margin: 0 0 12px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.activity-dashboard .location {
+    color: #334155;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0 0 16px 0;
+}
+
+.activity-dashboard .card-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.activity-dashboard .edit-btn,
+.activity-dashboard .delete-btn {
+    flex: 1;
+    padding: 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.activity-dashboard .edit-btn {
+    background: #f1f5f9;
+    color: var(--secondary);
+}
+
+.activity-dashboard .edit-btn:hover {
+    background: #e2e8f0;
+}
+
+.activity-dashboard .delete-btn {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+.activity-dashboard .delete-btn:hover {
+    background: #fecaca;
+}
+
+.activity-dashboard .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.activity-dashboard .error-message {
+    background: #fee2e2;
+    color: #dc2626;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.activity-dashboard .no-data {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    color: #64748b;
+    font-size: 1.1rem;
+}

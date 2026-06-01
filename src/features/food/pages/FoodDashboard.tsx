@@ -9,13 +9,14 @@ const FoodDashboard = () => {
     const [items, setItems] = useState<VKCEntity[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             setError(null);
             try {
-                const response = await getFoodsItems(1, 50);
+                const response = await getFoodsItems(1, 50, "", searchQuery);
                 if (response.success) {
                     const data = Array.isArray(response.Data) ? response.Data : [response.Data];
                     setItems(data);
@@ -31,7 +32,7 @@ const FoodDashboard = () => {
         };
 
         fetchData();
-    }, []);
+    }, [searchQuery]);
 
     const getItemId = (item: VKCEntity) => {
         if (typeof item._id === 'string') return item._id;
@@ -57,14 +58,20 @@ const FoodDashboard = () => {
 
     return (
         <div className="food-dashboard">
-            <header className="dashboard-header">
-                <h2>Food Management</h2>
-                <button
-                    className="add-btn"
-                    onClick={() => navigate('/food/add')}
-                >
-                    + Add New Food
-                </button>
+            <header className="dashboard-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h2>Food & Drink Management</h2>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                    <input
+                        type="text"
+                        placeholder="Search food..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #ccc' }}
+                    />
+                    <button className="add-btn" onClick={() => navigate('/food/add')}>
+                        + Add New Food
+                    </button>
+                </div>
             </header>
 
             {loading ? (
@@ -81,7 +88,7 @@ const FoodDashboard = () => {
                                         src={item.ProfileUrl}
                                         alt={item.Title}
                                         onError={(e) => {
-                                            (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x200?text=No+Image';
+                                            (e.target as HTMLImageElement).src = '/no-image.svg';
                                         }}
                                     />
                                     <div className="status-badge" data-show={item.IsShow !== 0}>

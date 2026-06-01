@@ -2,13 +2,16 @@ import http from '../../../services/http';
 import { ENDPOINTS } from '../../../services/endpoints';
 import { VKCEntity, ApiResponse } from '../../../types';
 
-export const getFoodsItems = async (pageIndex: number = 1, pageSize: number = 10, id: string = ""): Promise<ApiResponse<VKCEntity>> => {
-    const payload: any = {};
+export const getFoodsItems = async (pageIndex: number = 1, pageSize: number = 10, id: string = "", name: string = ""): Promise<ApiResponse<VKCEntity>> => {
+    const payload: any = {
+        PageIndex: pageIndex,
+        PageSize: pageSize,
+    };
     if (id) {
         payload.id = id;
-    } else {
-        payload.PageIndex = pageIndex;
-        payload.PageSize = pageSize;
+    }
+    if (name) {
+        payload.Name = name;
     }
 
     const response = await http.post<ApiResponse<VKCEntity>>(ENDPOINTS.FOOD_LIST, payload);

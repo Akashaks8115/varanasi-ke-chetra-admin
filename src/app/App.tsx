@@ -21,6 +21,10 @@ import SpiritualDashboard from '../features/spiritual/pages/SpiritualDashboard'
 import SpiritualForm from '../features/spiritual/pages/SpiritualForm'
 import TransportDashboard from '../features/transport/pages/TransportDashboard'
 import TransportForm from '../features/transport/pages/TransportForm'
+import CategoryDashboard from '../features/category/pages/CategoryDashboard'
+import CategoryForm from '../features/category/pages/CategoryForm'
+import ActivityDashboard from '../features/activity/pages/ActivityDashboard'
+import ActivityForm from '../features/activity/pages/ActivityForm'
 import FlightsDashboard from '../features/flights/pages/FlightsDashboard'
 import VisaDashboard from '../features/visa/pages/VisaDashboard'
 import SendNotificationPage from '../features/notifications/pages/SendNotificationPage'
@@ -50,12 +54,19 @@ const App = () => {
                     <Route path="/food/edit/:id" element={<FoodForm />} />
                     <Route path="/panchkroshi" element={<PanchkroshiDashboard />} />
                     <Route path="/panchkroshi/add" element={<PanchkroshiForm />} />
+                    <Route path="/panchkroshi/edit/:id" element={<PanchkroshiForm />} />
                     <Route path="/our-services" element={<OurServicesDashboard />} />
                     <Route path="/our-services/add" element={<OurServicesForm />} />
                     <Route path="/spiritual" element={<SpiritualDashboard />} />
                     <Route path="/spiritual/add" element={<SpiritualForm />} />
                     <Route path="/transport" element={<TransportDashboard />} />
                     <Route path="/transport/add" element={<TransportForm />} />
+                    <Route path="/category" element={<CategoryDashboard />} />
+                    <Route path="/category/add" element={<CategoryForm />} />
+                    <Route path="/category/edit/:id" element={<CategoryForm />} />
+                    <Route path="/activity" element={<ActivityDashboard />} />
+                    <Route path="/activity/add" element={<ActivityForm />} />
+                    <Route path="/activity/edit/:id" element={<ActivityForm />} />
                     <Route path="/flights" element={<FlightsDashboard />} />
                     <Route path="/visa" element={<VisaDashboard />} />
                     <Route path="/send-notification" element={<SendNotificationPage />} />

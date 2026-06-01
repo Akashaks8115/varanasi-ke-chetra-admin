@@ -2,9 +2,10 @@ import http from '../../../services/http';
 import { ENDPOINTS } from '../../../services/endpoints';
 import { VKCEntity, ApiResponse } from '../../../types';
 
-export const getGhatsItems = async (pageIndex: number = 1, pageSize: number = 10, id: string = ""): Promise<ApiResponse<VKCEntity>> => {
+export const getGhatsItems = async (pageIndex: number = 1, pageSize: number = 10, id: string = "", name: string = ""): Promise<ApiResponse<VKCEntity>> => {
     const response = await http.post<ApiResponse<VKCEntity>>(ENDPOINTS.GHAT_LIST, {
         id: id,
+        Name: name,
         PageIndex: pageIndex,
         PageSize: pageSize
     });
