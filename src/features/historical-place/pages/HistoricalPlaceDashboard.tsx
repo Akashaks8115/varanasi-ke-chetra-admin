@@ -10,13 +10,14 @@ const HistoricalPlaceDashboard = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             setError(null);
             try {
-                const response = await getHistoricalPlacesItems(1, 50, "", searchQuery);
+                const response = await getHistoricalPlacesItems(currentPage, 10, "", searchQuery);
                 if (response.success) {
                     const data = Array.isArray(response.Data) ? response.Data : [response.Data];
                     setItems(data);
@@ -32,7 +33,7 @@ const HistoricalPlaceDashboard = () => {
         };
 
         fetchData();
-    }, [searchQuery]);
+    }, [searchQuery, currentPage]);
 
     const getItemId = (item: VKCEntity) => {
         if (typeof item._id === 'string') return item._id;
@@ -65,7 +66,7 @@ const HistoricalPlaceDashboard = () => {
                         type="text" 
                         placeholder="Search historical places..." 
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
                         style={{ padding: '8px 12px', borderRadius: '6px', border: '1px solid #ccc' }}
                     />
                     <button className="add-btn" onClick={() => navigate('/historical-place/add')}>
@@ -115,6 +116,25 @@ const HistoricalPlaceDashboard = () => {
                     ) : (
                         <div className="no-data">No historical places found.</div>
                     )}
+                </div>
+            )}
+            {!loading && !error && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px' }}>
+                    <button 
+                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} 
+                        disabled={currentPage === 1}
+                        style={{ padding: '8px 16px', borderRadius: '4px', cursor: currentPage === 1 ? 'not-allowed' : 'pointer' }}
+                    >
+                        Previous
+                    </button>
+                    <span>Page {currentPage}</span>
+                    <button 
+                        onClick={() => setCurrentPage(prev => prev + 1)} 
+                        disabled={items.length < 10}
+                        style={{ padding: '8px 16px', borderRadius: '4px', cursor: items.length < 10 ? 'not-allowed' : 'pointer' }}
+                    >
+                        Next
+                    </button>
                 </div>
             )}
         </div>

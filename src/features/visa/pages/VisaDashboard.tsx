@@ -13,13 +13,14 @@ const VisaDashboard = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [totalInfo, setTotalInfo] = useState({ total: 0, page: 1, totalPages: 1 });
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             setError(null);
             try {
-                const response = await getVisaEnquiries();
+                const response = await getVisaEnquiries(currentPage, 10);
                 if (response.success) {
                     setItems(response.Data || []);
                     setTotalInfo({
@@ -38,7 +39,7 @@ const VisaDashboard = () => {
             }
         };
         fetchData();
-    }, []);
+    }, [currentPage]);
 
     return (
         <div className="flights-dashboard"> {/* Using same class for consistent styling */}
@@ -120,9 +121,27 @@ const VisaDashboard = () => {
                             ))}
                         </tbody>
                     </table>
-                    <div className="pagination-info">
+                    <div className="pagination-info" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '15px' }}>
                         <span>Showing {items.length} of {totalInfo.total} enquiries</span>
-                        <span>Page {totalInfo.page} of {totalInfo.totalPages}</span>
+                        <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
+                            <button 
+                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} 
+                                disabled={currentPage === 1}
+                                className="action-btn"
+                                style={{ background: currentPage === 1 ? '#ccc' : undefined }}
+                            >
+                                Previous
+                            </button>
+                            <span>Page {totalInfo.page} of {totalInfo.totalPages}</span>
+                            <button 
+                                onClick={() => setCurrentPage(prev => prev + 1)} 
+                                disabled={currentPage >= totalInfo.totalPages}
+                                className="action-btn"
+                                style={{ background: currentPage >= totalInfo.totalPages ? '#ccc' : undefined }}
+                            >
+                                Next
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

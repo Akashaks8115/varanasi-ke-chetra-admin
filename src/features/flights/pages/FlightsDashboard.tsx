@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getFlightEnquiries } from '../services/flightApi';
+import { getFlightEnquiries, deleteFlightEnquiry } from '../services/flightApi';
 import { TravelEnquiry } from '../../../types';
 import './flights-dashboard.css';
 
@@ -14,32 +14,53 @@ const FlightsDashboard = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [totalInfo, setTotalInfo] = useState({ total: 0, page: 1, totalPages: 1 });
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const fetchEnquiries = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await getFlightEnquiries(currentPage, 10);
+            if (response.success) {
+                setItems(response.Data || []);
+                setTotalInfo({
+                    total: response.TotalCount || 0,
+                    page: response.PageIndex || 1,
+                    totalPages: Math.ceil((response.TotalCount || 0) / (response.PageSize || 10))
+                });
+            } else {
+                setError('Failed to load flight enquiries.');
+            }
+        } catch (err: any) {
+            setError(`Failed to fetch flight enquiries. ${err?.message || ''}`);
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const response = await getFlightEnquiries();
-                if (response.success) {
-                    setItems(response.Data || []);
-                    setTotalInfo({
-                        total: response.TotalCount || 0,
-                        page: response.PageIndex || 1,
-                        totalPages: Math.ceil((response.TotalCount || 0) / (response.PageSize || 10))
-                    });
-                } else {
-                    setError('Failed to load flight enquiries.');
-                }
-            } catch (err: any) {
-                setError(`Failed to fetch flight enquiries. ${err?.message || ''}`);
-                console.error(err);
-            } finally {
-                setLoading(false);
+        fetchEnquiries();
+    }, [currentPage]);
+
+    const handleDelete = async (id: string) => {
+        if (!window.confirm('Are you sure you want to delete this enquiry?')) {
+            return;
+        }
+        try {
+            const res = await deleteFlightEnquiry(id);
+            if (res.success) {
+                // Refresh list
+                fetchEnquiries();
+            } else {
+                alert('Failed to delete enquiry');
             }
-        };
-        fetchData();
-    }, []);
+        } catch (err) {
+            console.error('Delete error:', err);
+            alert('Error deleting enquiry');
+        }
+    };
+
 
     return (
         <div className="flights-dashboard">
@@ -115,15 +136,33 @@ const FlightsDashboard = () => {
 
                                     {/* Action */}
                                     <td>
-                                        <button className="action-btn">Delete</button>
+                                        <button className="action-btn" onClick={() => handleDelete(item._id)}>Delete</button>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
-                    <div className="pagination-info">
+                    <div className="pagination-info" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '15px' }}>
                         <span>Showing {items.length} of {totalInfo.total} enquiries</span>
-                        <span>Page {totalInfo.page} of {totalInfo.totalPages}</span>
+                        <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
+                            <button 
+                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} 
+                                disabled={currentPage === 1}
+                                className="action-btn"
+                                style={{ background: currentPage === 1 ? '#ccc' : undefined }}
+                            >
+                                Previous
+                            </button>
+                            <span>Page {totalInfo.page} of {totalInfo.totalPages}</span>
+                            <button 
+                                onClick={() => setCurrentPage(prev => prev + 1)} 
+                                disabled={currentPage >= totalInfo.totalPages}
+                                className="action-btn"
+                                style={{ background: currentPage >= totalInfo.totalPages ? '#ccc' : undefined }}
+                            >
+                                Next
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

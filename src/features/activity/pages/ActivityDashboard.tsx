@@ -13,6 +13,7 @@ const ActivityDashboard = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -57,6 +58,10 @@ const ActivityDashboard = () => {
         };
 
         fetchData();
+    }, [searchQuery, selectedCategory]);
+
+    useEffect(() => {
+        setCurrentPage(1);
     }, [searchQuery, selectedCategory]);
 
     const getItemId = (item: VKCEntity) => {
@@ -142,7 +147,7 @@ const ActivityDashboard = () => {
             ) : (
                 <div className="items-grid">
                     {items.length > 0 ? (
-                        items.map((item) => (
+                        items.slice((currentPage - 1) * 10, currentPage * 10).map((item) => (
                             <div key={getItemId(item)} className="item-card">
                                 <div className="card-image">
                                     <img src={item.ProfileUrl} alt={item.Title} onError={(e) => {
@@ -173,6 +178,30 @@ const ActivityDashboard = () => {
                     ) : (
                         <div className="no-data">No activities found.</div>
                     )}
+                </div>
+            )}
+            {!loading && !error && items.length > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px' }}>
+                    <span style={{ color: 'var(--text-sub)' }}>
+                        Showing {items.slice((currentPage - 1) * 10, currentPage * 10).length} of {items.length} activities
+                    </span>
+                    <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
+                        <button 
+                            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} 
+                            disabled={currentPage === 1}
+                            style={{ padding: '8px 16px', borderRadius: '4px', cursor: currentPage === 1 ? 'not-allowed' : 'pointer', border: '1px solid #e2e8f0', background: 'white' }}
+                        >
+                            Previous
+                        </button>
+                        <span style={{ fontWeight: 500 }}>Page {currentPage} of {Math.ceil(items.length / 10) || 1}</span>
+                        <button 
+                            onClick={() => setCurrentPage(prev => prev + 1)} 
+                            disabled={currentPage >= Math.ceil(items.length / 10)}
+                            style={{ padding: '8px 16px', borderRadius: '4px', cursor: currentPage >= Math.ceil(items.length / 10) ? 'not-allowed' : 'pointer', border: '1px solid #e2e8f0', background: 'white' }}
+                        >
+                            Next
+                        </button>
+                    </div>
                 </div>
             )}
         </div>
