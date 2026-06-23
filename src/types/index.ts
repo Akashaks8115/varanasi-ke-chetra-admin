@@ -1,4 +1,7 @@
+import { ReactNode } from "react";
+
 export interface VKCEntity {
+    CatId: ReactNode;
     _id: string | { $oid: string };
     Title: string;
     SubTitle: string;
@@ -155,4 +158,75 @@ export interface Banner {
 export interface BannerApiResponse {
     success: boolean;
     data: Banner[] | Banner;
+}
+
+export interface AartiSession {
+    sessionId: string;
+    type: string;
+    title: string;
+    calculatedAartiTime: string;
+    duration: string;
+    isModifiedManually: boolean;
+    specialNote: string;
+    _id: string;
+}
+
+export interface AartiGhat {
+    ghatId: string;
+    ghatName: string;
+    ghatImage: string;
+    shortDescription: string;
+    googleMapsUrl: string;
+    crowdStatus: string;
+    sessions: AartiSession[];
+    _id: string;
+}
+
+export interface AartiTimingData {
+    _id: string;
+    date: string;
+    status: string;
+    message: string;
+    ghatsData: AartiGhat[];
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+}
+
+export interface AartiTimingApiResponse {
+    success: boolean;
+    data: AartiTimingData;
+}
+
+export interface EventVenue {
+    name: string;
+    googleMapsUrl: string;
+}
+
+export interface EventDates {
+    startDate: string;
+    endDate: string;
+    eventTiming: string;
+}
+
+export interface Event {
+    _id?: string;
+    eventId: string;
+    title: string;
+    subtitle: string;
+    eventImage: string;
+    description: string;
+    category: string;
+    venue: EventVenue;
+    dates: EventDates;
+    entryType: string;
+    boatBookingRequired: boolean;
+    crowdAlert: string;
+    tags: string[];
+}
+
+export interface EventApiResponse {
+    success: boolean;
+    message: string;
+    data: Event[];
 }

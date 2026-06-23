@@ -18,7 +18,7 @@ const CategoryDashboard = () => {
             try {
                 const response = await getCategoryItems();
                 if (response.success) {
-                    const data = Array.isArray(response.data) ? response.data : [response.data];
+                    const data = Array.isArray(response.Data) ? response.Data : [response.Data];
                     setItems(data.filter(Boolean));
                 } else {
                     setError((response as any).message || 'Failed to fetch categories');

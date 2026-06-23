@@ -47,4 +47,9 @@ export const ENDPOINTS = {
     INSERT_ACTIVITY: 'activity/insertActivity',
     UPDATE_ACTIVITY: 'activity/updateActivity',
     DELETE_ACTIVITY: 'activity/deleteActivity',
+    AARTI_TIMINGS: 'arti-timings',
+    GET_EVENTS: 'getEvent',
+    INSERT_EVENT: 'insertEvent',
+    UPDATE_EVENT: 'updateEvent',
+    DELETE_EVENT: 'deleteEvent',
 } as const;

@@ -31,6 +31,9 @@ import SendNotificationPage from '../features/notifications/pages/SendNotificati
 import UserTokenDashboard from '../features/user-token/pages/UserTokenDashboard'
 import BannerDashboard from '../features/banner/pages/BannerDashboard'
 import BannerForm from '../features/banner/pages/BannerForm'
+import AartiTimeDashboard from '../features/aarti-time/pages/AartiTimeDashboard'
+import EventDashboard from '../features/events/pages/EventDashboard'
+import EventForm from '../features/events/pages/EventForm'
 
 const App = () => {
     return (
@@ -74,6 +77,10 @@ const App = () => {
                     <Route path="/banner" element={<BannerDashboard />} />
                     <Route path="/banner/add" element={<BannerForm />} />
                     <Route path="/banner/edit/:id" element={<BannerForm />} />
+                    <Route path="/aarti-time" element={<AartiTimeDashboard />} />
+                    <Route path="/events" element={<EventDashboard />} />
+                    <Route path="/events/add" element={<EventForm />} />
+                    <Route path="/events/edit/:id" element={<EventForm />} />
                     <Route path=":category" element={<DataDashboard />} />
                     <Route path=":category/add" element={<EntityForm />} />
                     <Route path=":category/edit/:id" element={<EntityForm />} />

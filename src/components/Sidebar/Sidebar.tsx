@@ -26,7 +26,8 @@ import {
     Key,
     MessageCircle,
     ChevronDown,
-    ChevronRight
+    ChevronRight,
+    Clock
 } from 'lucide-react'
 
 const menu = [
@@ -50,6 +51,7 @@ const menu = [
     { label: 'auth', icon: <Lock />, path: '/auth' },
     { label: 'banner', icon: <Image />, path: '/banner' },
     { label: 'category', icon: <Folder />, path: '/category' },
+    { label: 'Aarti Time', icon: <Clock />, path: '/aarti-time' },
     { 
         label: 'Enquiries', 
         icon: <MessageCircle />, 
