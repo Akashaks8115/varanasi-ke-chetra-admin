@@ -72,8 +72,12 @@
     color: white;
 }
 
-.status-badge[data-show="1"] {
+.status-badge[data-show="true"] {
     background: #10b981;
+}
+
+.status-badge[data-show="false"] {
+    background: #ef4444;
 }
 
 .card-content {

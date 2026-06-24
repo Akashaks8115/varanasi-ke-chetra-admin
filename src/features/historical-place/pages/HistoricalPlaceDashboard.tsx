@@ -88,8 +88,8 @@ const HistoricalPlaceDashboard = () => {
                                     <img src={item.ProfileUrl} alt={item.Title} onError={(e) => {
                                         (e.target as HTMLImageElement).src = '/no-image.svg';
                                     }} />
-                                    <div className="status-badge" data-show={item.IsShow !== 0}>
-                                        {item.IsShow !== 0 ? 'Visible' : 'Hidden'}
+                                    <div className="status-badge" data-show={Number(item.IsShow) !== 0}>
+                                        {Number(item.IsShow) !== 0 ? 'Visible' : 'Hidden'}
                                     </div>
                                 </div>
                                 <div className="card-content">

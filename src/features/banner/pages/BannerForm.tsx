@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getBanners, insertBanner, updateBanner } from '../services/bannerApi';
 import { Banner } from '../../../types';
+import ImageUpload from '../../../components/ImageUpload/ImageUpload';
 import './banner-form.css';
 
 const BannerForm = () => {
@@ -116,14 +117,10 @@ const BannerForm = () => {
                 </div>
 
                 <div className="form-group">
-                    <label>Image URL</label>
-                    <input
-                        type="text"
-                        name="imageUrl"
+                    <ImageUpload
+                        label="Banner Image"
                         value={formData.imageUrl}
-                        onChange={handleChange}
-                        required
-                        placeholder="https://example.com/image.jpg"
+                        onChange={(url) => setFormData(prev => ({ ...prev, imageUrl: url }))}
                     />
                 </div>
 
