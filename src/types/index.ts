@@ -230,3 +230,25 @@ export interface EventApiResponse {
     message: string;
     data: Event[];
 }
+
+export interface GalleryItem {
+    _id?: string;
+    title: string;
+    description: string;
+    imageUrl: string;
+    location: string;
+    contributorName: string;
+    contributorInsta: string;
+    isActive?: number;
+}
+
+export interface GalleryApiResponse {
+    success: boolean;
+    message: string;
+    data?: GalleryItem[] | GalleryItem;
+    images?: GalleryItem[];
+    totalPages?: number;
+    currentPage?: number;
+    totalImages?: number;
+    totalItem?: number;
+}

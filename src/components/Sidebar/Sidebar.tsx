@@ -50,6 +50,7 @@ const menu = [
     { label: 'Version', icon: <Tag />, path: '/version' },
     { label: 'auth', icon: <Lock />, path: '/auth' },
     { label: 'banner', icon: <Image />, path: '/banner' },
+    { label: 'Gallery', icon: <Image />, path: '/gallery' },
     { label: 'category', icon: <Folder />, path: '/category' },
     { label: 'Aarti Time', icon: <Clock />, path: '/aarti-time' },
     { 

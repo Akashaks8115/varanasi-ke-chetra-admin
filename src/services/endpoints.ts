@@ -52,4 +52,8 @@ export const ENDPOINTS = {
     INSERT_EVENT: 'insertEvent',
     UPDATE_EVENT: 'updateEvent',
     DELETE_EVENT: 'deleteEvent',
+    GET_GALLERY: 'gallery/get',
+    INSERT_GALLERY: 'gallery/add',
+    UPDATE_GALLERY: 'gallery/update',
+    DELETE_GALLERY: 'gallery/delete',
 } as const;

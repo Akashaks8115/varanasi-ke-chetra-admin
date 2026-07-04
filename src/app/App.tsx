@@ -34,6 +34,8 @@ import BannerForm from '../features/banner/pages/BannerForm'
 import AartiTimeDashboard from '../features/aarti-time/pages/AartiTimeDashboard'
 import EventDashboard from '../features/events/pages/EventDashboard'
 import EventForm from '../features/events/pages/EventForm'
+import GalleryDashboard from '../features/gallery/pages/GalleryDashboard'
+import GalleryForm from '../features/gallery/pages/GalleryForm'
 
 const App = () => {
     return (
@@ -81,6 +83,9 @@ const App = () => {
                     <Route path="/events" element={<EventDashboard />} />
                     <Route path="/events/add" element={<EventForm />} />
                     <Route path="/events/edit/:id" element={<EventForm />} />
+                    <Route path="/gallery" element={<GalleryDashboard />} />
+                    <Route path="/gallery/add" element={<GalleryForm />} />
+                    <Route path="/gallery/edit/:id" element={<GalleryForm />} />
                     <Route path=":category" element={<DataDashboard />} />
                     <Route path=":category/add" element={<EntityForm />} />
                     <Route path=":category/edit/:id" element={<EntityForm />} />
