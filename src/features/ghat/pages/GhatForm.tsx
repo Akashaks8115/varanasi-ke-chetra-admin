@@ -157,6 +157,16 @@ const GhatForm = () => {
                                     rows={3}
                                 />
                             </div>
+                            <div className="form-group">
+                                <label>Description 3</label>
+                                <textarea
+                                    name="Description3"
+                                    value={formData.Description3}
+                                    onChange={handleInputChange}
+                                    placeholder="Tertiary description"
+                                    rows={3}
+                                />
+                            </div>
                         </div>
                     </div>
 
