@@ -58,11 +58,11 @@ const EntityForm = () => {
 
                     if (data) {
                         setFormData({
-                            Title: data.Title || '',
-                            SubTitle: data.SubTitle || '',
-                            Description1: data.Description1 || '',
-                            Description2: data.Description2 || '',
-                            Description3: data.Description3 || '',
+                            Title: (data.Title && data.Title !== 'null' && data.Title !== 'undefined') ? data.Title : '',
+                            SubTitle: (data.SubTitle && data.SubTitle !== 'null' && data.SubTitle !== 'undefined') ? data.SubTitle : '',
+                            Description1: (data.Description1 && data.Description1 !== 'null' && data.Description1 !== 'undefined') ? data.Description1 : '',
+                            Description2: (data.Description2 && data.Description2 !== 'null' && data.Description2 !== 'undefined') ? data.Description2 : '',
+                            Description3: (data.Description3 && data.Description3 !== 'null' && data.Description3 !== 'undefined') ? data.Description3 : '',
                             Location: data.Location || '',
                             Address: data.Address || '',
                             IsShow: data.IsShow ?? 1
@@ -240,6 +240,16 @@ const EntityForm = () => {
                                         value={formData.Description2}
                                         onChange={handleInputChange}
                                         placeholder="Secondary description"
+                                        rows={3}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Description 3</label>
+                                    <textarea
+                                        name="Description3"
+                                        value={formData.Description3}
+                                        onChange={handleInputChange}
+                                        placeholder="Tertiary description"
                                         rows={3}
                                     />
                                 </div>

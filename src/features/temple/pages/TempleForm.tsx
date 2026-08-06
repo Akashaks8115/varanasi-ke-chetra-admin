@@ -40,13 +40,13 @@ const TempleForm = () => {
                     if (response.success && dataArray.length > 0) {
                         const data = dataArray[0];
                         setFormData({
-                            Title: data.Title || '',
-                            SubTitle: data.SubTitle || '',
-                            Description1: data.Description1 || '',
-                            Description2: data.Description2 || '',
-                            Description3: data.Description3 || '',
-                            Location: data.Location || '',
-                            Address: data.Address || '',
+                            Title: (data.Title && data.Title !== 'null' && data.Title !== 'undefined') ? data.Title : '',
+                            SubTitle: (data.SubTitle && data.SubTitle !== 'null' && data.SubTitle !== 'undefined') ? data.SubTitle : '',
+                            Description1: (data.Description1 && data.Description1 !== 'null' && data.Description1 !== 'undefined') ? data.Description1 : '',
+                            Description2: (data.Description2 && data.Description2 !== 'null' && data.Description2 !== 'undefined') ? data.Description2 : '',
+                            Description3: (data.Description3 && data.Description3 !== 'null' && data.Description3 !== 'undefined') ? data.Description3 : '',
+                            Location: data.Location && data.Location !== 'null' ? data.Location : '',
+                            Address: data.Address && data.Address !== 'null' ? data.Address : '',
                             IsShow: data.IsShow ?? 1
                         });
                         setPreviews({
