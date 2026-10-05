@@ -56,4 +56,10 @@ export const ENDPOINTS = {
     INSERT_GALLERY: 'gallery/add',
     UPDATE_GALLERY: 'gallery/update',
     DELETE_GALLERY: 'gallery/delete',
+    NEWS_LIST: 'admin/news/list',
+    DELETE_NEWS: 'admin/news',
+    SYNC_NEWS: 'admin/news/sync',
+    HIDE_NEWS: 'admin/news/hide',
+    INSERT_NEWS: 'admin/news',
+    UPDATE_NEWS: 'admin/news',
 } as const;
